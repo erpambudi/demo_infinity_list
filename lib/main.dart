@@ -39,6 +39,14 @@ class _HomePageState extends State<HomePage> {
   int limit = 10;
   double heightCard = 100;
 
+  @override
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+    //Limit diambil dari berapa banyak card yang dapat ditampillan pada layar
+    limit = (MediaQuery.of(context).size.height / heightCard).round();
+    await Provider.of<PersonsProvider>(context, listen: false).fetchData(limit);
+  }
+
   void onScroll() async {
     final provider = Provider.of<PersonsProvider>(context, listen: false);
     double maxScroll = controller.position.maxScrollExtent;
@@ -53,9 +61,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    //Limit diambil dari berapa banyak card yang dapat ditampillan pada layar
-    limit = (MediaQuery.of(context).size.height / heightCard).round();
-    Provider.of<PersonsProvider>(context, listen: false).fetchData(limit);
     controller.addListener(onScroll);
 
     return Scaffold(
